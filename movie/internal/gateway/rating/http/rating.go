@@ -5,24 +5,32 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/supersherm5/movie-app/movie/internal/gateway"
+	"github.com/supersherm5/movie-app/pkg/discovery"
 	"github.com/supersherm5/movie-app/rating/pkg/model"
+	"math/rand"
 	"net/http"
 )
 
 // Gateway defines an HTTP gateway for a rating service.
 type Gateway struct {
-	addr string
+	registry discovery.Registry
 }
 
 // New creates a new HTTP gateway for a rating service.
-func New(addr string) *Gateway {
-	return &Gateway{addr}
+func New(registry discovery.Registry) *Gateway {
+	return &Gateway{
+		registry,
+	}
 }
 
 // GetAggregatedRating gets the aggregated rating for a record or ErrNotFound if there are no ratings for it.
 func (g *Gateway) GetAggregatedRating(ctx context.Context, recordID model.RecordID, recordType model.RecordType) (float64, error) {
-	RatingPath := fmt.Sprintf("%s/rating", g.addr)
-	req, reqErr := http.NewRequest(http.MethodGet, RatingPath, nil)
+	addrs, err := g.registry.ServiceAddresses(ctx, "rating")
+	if err != nil {
+		return 0, err
+	}
+	url := "http://" + addrs[rand.Intn(len(addrs))] + "/rating/"
+	req, reqErr := http.NewRequest(http.MethodGet, url, nil)
 	if reqErr != nil {
 		return 0, gateway.ErrServiceNotReachable
 	}
@@ -60,8 +68,12 @@ func (g *Gateway) GetAggregatedRating(ctx context.Context, recordID model.Record
 
 // PutRating writes a rating
 func (g *Gateway) PutRating(ctx context.Context, recordID model.RecordID, recordType model.RecordType, rating *model.Rating) error {
-	RatingPath := fmt.Sprintf("%s/rating", g.addr)
-	req, reqErr := http.NewRequest(http.MethodPut, RatingPath, nil)
+	addrs, err := g.registry.ServiceAddresses(ctx, "rating")
+	if err != nil {
+		return err
+	}
+	url := "http://" + addrs[rand.Intn(len(addrs))] + "/rating/"
+	req, reqErr := http.NewRequest(http.MethodPut, url, nil)
 	if reqErr != nil {
 		return gateway.ErrServiceNotReachable
 	}

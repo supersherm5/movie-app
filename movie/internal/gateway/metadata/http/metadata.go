@@ -6,23 +6,33 @@ import (
 	"fmt"
 	"github.com/supersherm5/movie-app/metadata/pkg/model"
 	"github.com/supersherm5/movie-app/movie/internal/gateway"
+	"github.com/supersherm5/movie-app/pkg/discovery"
+	"log"
+	"math/rand"
 	"net/http"
 )
 
 // Gateway defines a movie metadata HTTP gateway.
 type Gateway struct {
-	addr string
+	registry discovery.Registry
 }
 
 // New creates a new HTTP gateway for a movie metadata service.
-func New(addr string) *Gateway {
-	return &Gateway{addr}
+func New(registry discovery.Registry) *Gateway {
+	return &Gateway{registry}
 }
 
 // Get gets movie metadata by a movie id.
 func (g *Gateway) Get(ctx context.Context, id string) (*model.Metadata, error) {
-	MetadataPath := fmt.Sprintf("%s/metadata", g.addr)
-	req, reqErr := http.NewRequest(http.MethodGet, MetadataPath, nil)
+	addrs, err := g.registry.ServiceAddresses(ctx, "metadata")
+	if err != nil {
+		return nil, err
+	}
+
+	url := "http://" + addrs[rand.Intn(len(addrs))] + "/metadata/"
+	log.Printf("Calling metadata service. Request GET %s", url)
+
+	req, reqErr := http.NewRequest(http.MethodGet, url, nil)
 	if reqErr != nil {
 		return nil, gateway.ErrServiceNotReachable
 	}
