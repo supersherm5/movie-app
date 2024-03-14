@@ -2,7 +2,11 @@ module github.com/supersherm5/movie-app
 
 go 1.21.5
 
-require github.com/hashicorp/consul/api v1.26.1
+require (
+	github.com/golang/protobuf v1.5.0
+	github.com/hashicorp/consul/api v1.26.1
+	google.golang.org/protobuf v1.33.0
+)
 
 require (
 	github.com/armon/go-metrics v0.4.1 // indirect

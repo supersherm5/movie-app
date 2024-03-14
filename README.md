@@ -29,3 +29,13 @@ In server-side discovery, the server is responsible for finding the location of 
 
 Consul is a popular service discovery tool. It is a distributed, highly available, and scalable service discovery tool. It is designed to be used in a microservice-based system. It is a central location where services can register themselves, and where clients can look up the location of a service. It was chosen for this repo.
 Kubernetes is a popular container orchestration tool. It is designed to be used in a microservice-based system. It is a central location where services can register themselves, and where clients can look up the location of a service.
+
+## Serialization
+Serialization is the process of converting an object into a format that can be transmitted over a network. It is a critical part of building a microservice-based system. In a microservice-based system, services are constantly communicating with each other. This means that objects need to be serialized before they can be transmitted over the network.
+
+### Popular Serialization Formats
+- JSON
+- Protocol Buffers
+- Avro
+- Thrift
+- XML
