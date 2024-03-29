@@ -9,10 +9,10 @@ type RecordType string
 // UserID defines a user id.
 type UserID string
 
-// RatingValues defines a rating value.
+// RatingValue RatingValue Type defines a rating value.
 type RatingValue float64
 
-// Existing record types.
+// RecordTypeMovie Existing record types.
 const (
 	RecordTypeMovie RecordType = "movie"
 )

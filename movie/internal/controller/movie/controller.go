@@ -57,6 +57,10 @@ func (c *Controller) Get(ctx context.Context, id string) (*model.MovieDetails, e
 		}
 	}
 
-	details.Rating = &rating
+	details.Rating = rating
 	return details, nil
+}
+
+func (c *Controller) PutRating(ctx context.Context, id, recordType string, rating *RatingModel.Rating) error {
+	return c.ratingGateway.PutRating(ctx, RatingModel.RecordID(id), RatingModel.RecordType(recordType), rating)
 }

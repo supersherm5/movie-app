@@ -3,10 +3,10 @@ package http
 import (
 	"encoding/json"
 	"errors"
+	"github.com/supersherm5/movie-app/metadata/internal/controller/metadata"
 	"log"
 	"net/http"
 
-	"github.com/supersherm5/movie-app/metadata/internal/controller/metadata"
 	"github.com/supersherm5/movie-app/metadata/internal/repository"
 )
 

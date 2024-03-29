@@ -3,7 +3,6 @@ package metadata
 import (
 	"context"
 	"errors"
-
 	"github.com/supersherm5/movie-app/metadata/internal/repository"
 	"github.com/supersherm5/movie-app/metadata/pkg/model"
 )

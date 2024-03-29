@@ -21,12 +21,20 @@ func New() *Repository {
 	}
 }
 
+// NewWithMetadata returns a new instance of a memory movie metadata repository with the given metadata.
+func NewWithMetadata(metadata map[string]*model.Metadata) *Repository {
+	return &Repository{
+		data: metadata,
+	}
+}
+
 // Get returns a movie metadata from the repository by id
 func (r *Repository) Get(_ context.Context, id string) (*model.Metadata, error) {
 	r.RLock()
 	defer r.RUnlock()
 
-	if m, ok := r.data[id]; !ok {
+	m := r.data[id]
+	if m != nil {
 		return m, nil
 	}
 

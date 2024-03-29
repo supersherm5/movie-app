@@ -2,6 +2,7 @@ package memory
 
 import (
 	"context"
+	"log"
 
 	"github.com/supersherm5/movie-app/rating/internal/repository"
 	"github.com/supersherm5/movie-app/rating/pkg/model"
@@ -16,6 +17,12 @@ type Repository struct {
 func New() *Repository {
 	return &Repository{
 		make(map[model.RecordType]map[model.RecordID][]model.Rating),
+	}
+}
+
+func NewWithRatings(ratings map[model.RecordType]map[model.RecordID][]model.Rating) *Repository {
+	return &Repository{
+		ratings,
 	}
 }
 
@@ -42,8 +49,11 @@ func (r *Repository) Put(ctx context.Context, recordID model.RecordID, recordTyp
 	if _, ok := r.data[recordType]; !ok {
 		r.data[recordType] = make(map[model.RecordID][]model.Rating)
 	}
-
+	log.Printf("recordType => %v, recordID => %v", recordType, recordID)
+	log.Println("ratings before adding new rating => ", r.data[recordType][recordID])
+	log.Println("rating to add => ", *rating)
 	r.data[recordType][recordID] = append(r.data[recordType][recordID], *rating)
+	log.Println("ratings after adding new rating => ", r.data[recordType][recordID])
 
 	return nil
 }

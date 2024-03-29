@@ -16,7 +16,7 @@ type ServiceInstance struct {
 // Registry defines an in-memory service registry.
 type Registry struct {
 	sync.RWMutex
-	serviceAddrs map[string]map[string]*ServiceInstance // map[servideName]map[instanceID]*ServiceInstance
+	serviceAddrs map[string]map[string]*ServiceInstance // map[serviceName]map[instanceID]*ServiceInstance
 }
 
 // New creates a new in-memory service registry instance.
