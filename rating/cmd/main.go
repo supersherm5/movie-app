@@ -40,7 +40,7 @@ func main() {
 		log.Fatalf("Failed to register %v service: %v", serviceName, err)
 	}
 	repo := memory.New()
-	ctrl := ratingCntrl.New(repo)
+	ctrl := ratingCntrl.New(repo, nil)
 	h := ratingHandler.New(ctrl)
 	lis, err := net.Listen("tcp", "localhost:8082")
 	if err != nil {
