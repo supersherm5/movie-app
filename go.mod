@@ -6,6 +6,7 @@ require (
 	github.com/confluentinc/confluent-kafka-go v1.9.2
 	github.com/golang/protobuf v1.5.3
 	github.com/hashicorp/consul/api v1.26.1
+	github.com/lib/pq v1.10.9
 	google.golang.org/grpc v1.62.1
 	google.golang.org/protobuf v1.33.0
 )

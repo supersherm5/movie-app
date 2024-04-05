@@ -19,7 +19,7 @@ import (
 	"github.com/supersherm5/movie-app/pkg/discovery/consul"
 	ratingCntrl "github.com/supersherm5/movie-app/rating/internal/controller/rating"
 	ratingHandler "github.com/supersherm5/movie-app/rating/internal/handler/grpc"
-	"github.com/supersherm5/movie-app/rating/internal/repository/memory"
+	"github.com/supersherm5/movie-app/rating/internal/repository/postgres"
 )
 
 const serviceName = "rating"
@@ -39,7 +39,10 @@ func main() {
 	if err := registry.Register(ctx, instanceID, serviceName, hostPort); err != nil {
 		log.Fatalf("Failed to register %v service: %v", serviceName, err)
 	}
-	repo := memory.New()
+	repo, repoErr := postgres.NewPostgresRepo()
+	if repoErr != nil {
+		log.Fatalf("Rating service failed to connect to postgres.")
+	}
 	ctrl := ratingCntrl.New(repo, nil)
 	h := ratingHandler.New(ctrl)
 	lis, err := net.Listen("tcp", "localhost:8082")

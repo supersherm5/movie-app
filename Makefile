@@ -33,9 +33,12 @@ start-all-services:
 
 start-consul:
 	@echo "Searching for Hashicorp/Consul image..."
-	@if docker image ls | grep -q "hashicorp/consul"; then \
-  		echo "Dev-consul container was found. Starting consul container."; \
+	@if docker container ls -a | grep -q "dev-consul"; then \
+  	echo "Dev-consul container was found. Starting consul container."; \
 		docker container start dev-consul; \
+	elif docker image ls | grep -q "hashicorp/consul"; then \
+		echo "Hashicorp/consul image already downloaded. Starting consul container."; \
+		docker run -d -p 8500:8500 -p 8600:8600/udp --name=dev-consul hashicorp/consul agent -server -ui -node=server-1 -bootstrap-expect=1 -client=0.0.0.0; \
 	else \
 		echo "Hashicorp/Consul image isn't installed. Downloading hashicorp/consul:latest."; \
 		docker pull hashicorp/consul; \
